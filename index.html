@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Local Weather</title>
+	<link rel="stylesheet" href="css/css.css">
+	<link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/weather.css">
+
+</head>
+<body>
+
+
+	<div class="container">
+		<div id="box">
+			<div class="row text-center">
+				<div id="drizzle" class="hidden">
+					<div class="icon rainy">
+						<div class="cloud"></div>
+						<div class="rain"></div>
+					</div>
+				</div>
+				<div id="clouds" class="hidden">
+					<div class="icon cloudy">
+						<div class="cloud"></div>
+						<div class="cloud"></div>
+					</div>
+				</div>
+				<div id="rain" class="hidden">
+					<div class="icon rainy">
+						<div class="cloud"></div>
+						<div class="rain"></div>
+					</div>
+				</div>
+				<div id="snow" class="hidden">
+					<div class="icon flurries">
+						<div class="cloud"></div>
+						<div class="snow">
+							<div class="flake"></div>
+							<div class="flake"></div>
+						</div>
+					</div>
+				</div>
+				<div id="clear" class="hidden">
+					<div class="icon cloudy">
+						<div class="cloud"></div>
+						<div class="cloud"></div>
+					</div>
+				</div>
+				<div id="thunderstorms" class="hidden">
+					<div class="icon thunder-storm">
+						<div class="cloud"></div>
+						<div class="lightning">
+							<div class="bolt"></div>
+							<div class="bolt"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<h1 id="weatherName"></h1>
+			<h1>Temperature</h1>
+			<a href="#">
+				<h2 id="tempVC"></h2>
+				<h2 id="tempVF"></h2>
+			</a>
+		</div>
+	</div>
+
+
+
+
+
+
+
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script type="text/javascript">
+	var country;
+	var city;
+	var weather;
+	var weatherIcon;
+	var celsius;
+	var fahrenheit;
+	var api = "http://api.openweathermap.org/data/2.5/weather?q=";
+	var appid = "&APPID=6d42147b97d9d24e75c401c136a6b326";
+	var callback = "";
+
+	$.ajax({
+		url: "http://ipinfo.io",
+		async: false,
+		dataType: 'json',
+		success: function(data) {
+			country = data.country;
+			city = data.city;
+		}
+	});
+
+	$.ajax({
+		url: api+city+","+country+appid+callback,
+		async: false,
+		dataType: 'json',
+		success: function(data) {
+			weather = data.weather[0].main;
+			celsius = Math.floor(data.main.temp) - 273 + '°';
+			fahrenheit = Math.floor((Math.floor(data.main.temp) - 273) * (9/5) + 32) + "°F"
+		}
+	});
+	$("#tempVC").html(celsius)
+	$("#tempVF").html(fahrenheit)
+	$("#weatherName").html(weather)
+	$(document).ready(function(){
+	});
+
+	$('#tempVF').hide();
+	$('#tempVF, #tempVC').on(
+		'click',
+		function()
+		{
+			$('#tempVF, #tempVC').toggle()
+		}
+	);
+	</script>
+
+	<script type="text/javascript">
+	console.log(weather);
+	switch (weather) {
+		case "Drizzle":
+		$("#drizzle").removeClass('hidden');
+		break;
+
+		case "Clouds":
+		$("#clouds").removeClass('hidden');
+		break;
+
+		case "Rain":
+		$("#rain").removeClass('hidden');
+		break;
+
+		case "Snow":
+		$("#snow").removeClass('hidden');
+		break;
+
+		case "Clear":
+		$("#clear").removeClass('hidden');
+		break;
+
+		case "Thunderstorms":
+		$("#thunderstorms").removeClass('hidden');
+		break;
+	}
+	</script>
+
+
+</body>
+</html>
